@@ -54,7 +54,7 @@ export function ScheduleForm() {
           Dosagem (opcional)
           <input
             name="scheduleDosage"
-            placeholder="e.g. 1 pill"
+            placeholder="e.g. 1 capsula"
             className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/40"
           />
         </label>
