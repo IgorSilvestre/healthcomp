@@ -155,7 +155,7 @@ export default async function Home() {
           <div className="mt-6 space-y-4">
             {history.length === 0 ? (
               <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-6 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-400">
-                Sem histórico ainda, adicione na navigação acima
+                Sem histórico ainda, adicione na navegação acima
               </p>
             ) : (
               history.map((entry) => (
