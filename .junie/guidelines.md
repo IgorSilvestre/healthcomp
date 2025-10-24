@@ -1,0 +1,2 @@
+- write all user viewed text in portuguese
+- always remember mobile and desktop (mobile design must be app like)
