@@ -14,7 +14,7 @@ export function TrashButton({
       type={type}
       aria-label="Excluir"
       title="Excluir"
-      className={className}
+      className={`${className} cursor-pointer`}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
