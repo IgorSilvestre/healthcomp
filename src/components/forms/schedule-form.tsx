@@ -104,7 +104,7 @@ export function ScheduleForm() {
           <textarea
             name="scheduleNotes"
             rows={3}
-            placeholder="Add context like take with food or watch for dizziness."
+            placeholder="Adicione contexto como tomar com comida ou ficar atento a tonturas."
             className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/40"
           />
         </label>
