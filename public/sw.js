@@ -1,46 +1,39 @@
-const CACHE_NAME = "app-cache-v1";
-const ASSETS = [
-  "/",
-  "/manifest.webmanifest",
-  "/logo.png",
-];
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)),
-  );
+/* Service Worker para notificações locais.
+   Nota: Para push real em background, seria necessário integrar com Web Push/VAPID e um servidor.
+*/
+self.addEventListener('install', () => {
+  // Ativa imediatamente a nova versão do SW
   self.skipWaiting();
 });
 
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches
-      .keys()
-      .then((keys) =>
-        Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))),
-      ),
-  );
-  self.clients.claim();
+self.addEventListener('activate', (event) => {
+  // Assume controle das páginas abertas
+  event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener("fetch", (event) => {
-  const req = event.request;
-  if (req.method !== "GET") return;
+// Recebe mensagens da página para exibir notificações
+self.addEventListener('message', (event) => {
+  const data = event.data || {};
+  if (data && data.type === 'notify' && data.payload) {
+    const { title, options } = data.payload;
+    // Garante que temos um registration para notificar
+    self.registration.showNotification(title || 'Notificação', options || {});
+  }
+});
 
-  const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return;
-
-  event.respondWith(
-    caches.match(req).then((cached) => {
-      const fetchPromise = fetch(req)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
-          return res;
-        })
-        .catch(() => cached);
-
-      return cached || fetchPromise;
-    }),
+// Foco/abertura do app ao clicar na notificação
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    (async () => {
+      const allClients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      const url = '/schedule';
+      let client = allClients.find((c) => c.url.includes(url));
+      if (client) {
+        client.focus();
+      } else {
+        self.clients.openWindow(url);
+      }
+    })()
   );
 });

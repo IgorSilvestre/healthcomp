@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getSchedules, type Schedule, getNextDoseTimestamp } from "@/lib/care-log";
+import NotificationsScheduler from "@/components/notifications-scheduler";
 
 function formatDateTime(value: number, locale: string | string[] = "default") {
   return new Intl.DateTimeFormat(locale, {
@@ -93,6 +94,9 @@ export default async function SchedulePage() {
             Novo agendamento
           </Link>
         </div>
+
+        {/* Agendador de notificações (mobile e desktop) */}
+        <NotificationsScheduler schedules={schedules} />
 
         {schedules.length === 0 ? (
           <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-6 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-400">
