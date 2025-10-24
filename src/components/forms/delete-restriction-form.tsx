@@ -5,14 +5,23 @@ import { deleteRestriction as deleteRestrictionAction } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
 import { TrashButton } from "@/components/button/trashButton";
 
-export function DeleteRestrictionForm({ restrictionId }: { restrictionId: string }) {
-  const [, formAction] = useActionState(deleteRestrictionAction, defaultActionState);
+export function DeleteRestrictionForm({
+  restrictionId,
+}: {
+  restrictionId: string;
+}) {
+  const [, formAction] = useActionState(
+    deleteRestrictionAction,
+    defaultActionState,
+  );
 
   return (
     <form
       action={async (formData: FormData) => {
         if (typeof window !== "undefined") {
-          const ok = window.confirm("Tem certeza que deseja excluir esta restrição? Esta ação não pode ser desfeita.");
+          const ok = window.confirm(
+            "Tem certeza que deseja excluir esta restrição? Esta ação não pode ser desfeita.",
+          );
           if (!ok) return;
         }
         return formAction(formData);

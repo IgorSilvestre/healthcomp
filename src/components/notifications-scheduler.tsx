@@ -31,9 +31,19 @@ function computeNextDueAt(s: Schedule, now: number) {
 
 type PendingTimer = { id: number; scheduleId: string };
 
-export default function NotificationsScheduler({ schedules }: { schedules: Schedule[] }) {
-  const [permission, setPermission] = useState<NotificationPermission>(typeof window !== "undefined" && "Notification" in window ? Notification.permission : "default");
-  const [swReady, setSwReady] = useState<ServiceWorkerRegistration | null>(null);
+export default function NotificationsScheduler({
+  schedules,
+}: {
+  schedules: Schedule[];
+}) {
+  const [permission, setPermission] = useState<NotificationPermission>(
+    typeof window !== "undefined" && "Notification" in window
+      ? Notification.permission
+      : "default",
+  );
+  const [swReady, setSwReady] = useState<ServiceWorkerRegistration | null>(
+    null,
+  );
   const timers = useRef<PendingTimer[]>([]);
   const timerId = useRef<number | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -71,8 +81,12 @@ export default function NotificationsScheduler({ schedules }: { schedules: Sched
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    setPermission("Notification" in window ? Notification.permission : "denied");
-    setShowPrompt(("Notification" in window) && Notification.permission !== "granted");
+    setPermission(
+      "Notification" in window ? Notification.permission : "denied",
+    );
+    setShowPrompt(
+      "Notification" in window && Notification.permission !== "granted",
+    );
   }, []);
 
   function clearAllTimers() {
@@ -181,11 +195,17 @@ export default function NotificationsScheduler({ schedules }: { schedules: Sched
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 mx-auto mb-4 w-full max-w-md animate-in slide-in-from-bottom-2 fade-in rounded-2xl border border-emerald-200/60 bg-white p-4 shadow-lg dark:border-emerald-800/40 dark:bg-slate-900 sm:max-w-lg">
       <div className="flex items-start gap-3">
-        <div className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-emerald-500" aria-hidden />
+        <div
+          className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-emerald-500"
+          aria-hidden
+        />
         <div className="flex-1">
-          <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">Ative notificações</div>
+          <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+            Ative notificações
+          </div>
           <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">
-            Para receber alertas na hora dos agendamentos no celular e no desktop, permita notificações do app.
+            Para receber alertas na hora dos agendamentos no celular e no
+            desktop, permita notificações do app.
           </p>
         </div>
         <div className="flex gap-2">

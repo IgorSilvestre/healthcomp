@@ -7,4 +7,4 @@ export const PURPOSES = [
   "outro",
 ] as const;
 
-export type Purpose = typeof PURPOSES[number];
+export type Purpose = (typeof PURPOSES)[number];

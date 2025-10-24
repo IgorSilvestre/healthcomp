@@ -54,9 +54,5 @@ export async function addMedicationToCatalog(input: {
 }
 
 export async function deleteMedicationFromCatalog(id: string) {
-  await redis
-    .multi()
-    .srem(MED_IDS_KEY, id)
-    .del(medKey(id))
-    .exec();
+  await redis.multi().srem(MED_IDS_KEY, id).del(medKey(id)).exec();
 }

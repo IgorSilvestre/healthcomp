@@ -1,15 +1,16 @@
 import Link from "next/link";
-import { getSchedules, type Schedule, getNextDoseTimestamp } from "@/lib/care-log";
+import {
+  getSchedules,
+  type Schedule,
+  getNextDoseTimestamp,
+} from "@/lib/care-log";
+import { formatDateTime } from "@/lib/datetime";
 import NotificationsScheduler from "@/components/notifications-scheduler";
 
-function formatDateTime(value: number, locale: string | string[] = "default") {
-  return new Intl.DateTimeFormat(locale, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(value));
-}
-
-function formatRelativeTime(milliseconds: number, formatter: Intl.RelativeTimeFormat) {
+function formatRelativeTime(
+  milliseconds: number,
+  formatter: Intl.RelativeTimeFormat,
+) {
   const divisions: Array<[number, Intl.RelativeTimeFormatUnit]> = [
     [60_000, "second"],
     [3_600_000, "minute"],
@@ -25,7 +26,11 @@ function formatRelativeTime(milliseconds: number, formatter: Intl.RelativeTimeFo
           ? Math.round(milliseconds / 1_000)
           : Math.round(
               milliseconds /
-                (unit === "minute" ? 60_000 : unit === "hour" ? 3_600_000 : 86_400_000),
+                (unit === "minute"
+                  ? 60_000
+                  : unit === "hour"
+                    ? 3_600_000
+                    : 86_400_000),
             );
       return formatter.format(value, unit);
     }
@@ -37,7 +42,17 @@ function formatRelativeTime(milliseconds: number, formatter: Intl.RelativeTimeFo
 
 import DeleteScheduleForm from "@/components/forms/delete-schedule-form";
 
-function ScheduleItem({ schedule, now, locale, rtf }: { schedule: Schedule; now: number; locale: string | string[]; rtf: Intl.RelativeTimeFormat; }) {
+function ScheduleItem({
+  schedule,
+  now,
+  locale,
+  rtf,
+}: {
+  schedule: Schedule;
+  now: number;
+  locale: string | string[];
+  rtf: Intl.RelativeTimeFormat;
+}) {
   const next = getNextDoseTimestamp(schedule);
   const nextLabel = isNaN(next)
     ? "Nenhuma dose futura (finalizado)"
@@ -52,21 +67,28 @@ function ScheduleItem({ schedule, now, locale, rtf }: { schedule: Schedule; now:
               Agendado
             </span>
           </div>
-          <h3 className="mt-2 text-lg font-semibold text-slate-900 dark:text-white">{schedule.medicationName}</h3>
+          <h3 className="mt-2 text-lg font-semibold text-slate-900 dark:text-white">
+            {schedule.medicationName}
+          </h3>
           {schedule.dosage && (
-            <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Dose: {schedule.dosage}</p>
+            <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
+              Dose: {schedule.dosage}
+            </p>
           )}
           {schedule.notes && (
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{schedule.notes}</p>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              {schedule.notes}
+            </p>
           )}
         </div>
         <div className="flex flex-col items-end gap-2 text-right text-xs text-slate-500 dark:text-slate-400 sm:items-end">
-          <div className="font-medium text-slate-700 dark:text-slate-200">Próxima dose</div>
+          <div className="font-medium text-slate-700 dark:text-slate-200">
+            Próxima dose
+          </div>
           <div>{nextLabel}</div>
           <div className="mt-2 flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto">
             <Link
-              href={`/schedule/${schedule.id}/edit`
-              }
+              href={`/schedule/${schedule.id}/edit`}
               className="rounded-full bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-700"
             >
               Editar
@@ -89,8 +111,13 @@ export default async function SchedulePage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 text-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 dark:text-slate-100">
       <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Agendamentos</h1>
-          <Link href="/schedule/new" className="rounded-full bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700">
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
+            Agendamentos
+          </h1>
+          <Link
+            href="/schedule/new"
+            className="rounded-full bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+          >
             Novo Agendamento
           </Link>
         </div>
@@ -100,12 +127,19 @@ export default async function SchedulePage() {
 
         {schedules.length === 0 ? (
           <p className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-6 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-400">
-            Nenhum agendamento ainda. Clique em "Novo agendamento" para adicionar.
+            Nenhum agendamento ainda. Clique em "Novo agendamento" para
+            adicionar.
           </p>
         ) : (
           <div className="space-y-4">
             {schedules.map((s) => (
-              <ScheduleItem key={s.id} schedule={s} now={now} locale={locale} rtf={rtf} />
+              <ScheduleItem
+                key={s.id}
+                schedule={s}
+                now={now}
+                locale={locale}
+                rtf={rtf}
+              />
             ))}
           </div>
         )}

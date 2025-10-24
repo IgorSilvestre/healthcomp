@@ -141,7 +141,8 @@ export default function BottomNav() {
     >
       <ul className="mx-auto flex max-w-6xl items-stretch justify-around px-2 py-2">
         {items.map(({ href, label, icon }) => {
-          const active = pathname === href || (href !== "/" && pathname?.startsWith(href));
+          const active =
+            pathname === href || (href !== "/" && pathname?.startsWith(href));
           return (
             <li key={href} className="flex-1">
               <Link
@@ -154,7 +155,9 @@ export default function BottomNav() {
                 aria-current={active ? "page" : undefined}
                 aria-label={label}
               >
-                <span className={`flex items-center justify-center rounded-full p-1 ${active ? "ring-2 ring-sky-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900" : ""}`}>
+                <span
+                  className={`flex items-center justify-center rounded-full p-1 ${active ? "ring-2 ring-sky-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900" : ""}`}
+                >
                   {icon(active)}
                 </span>
                 <span className="sr-only">{label}</span>

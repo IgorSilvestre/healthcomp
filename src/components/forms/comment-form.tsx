@@ -28,7 +28,8 @@ export function CommentForm() {
         Deixe um comentário
       </h2>
       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-        Compartilhe observações, feedback do paciente ou lembretes para o próximo turno.
+        Compartilhe observações, feedback do paciente ou lembretes para o
+        próximo turno.
       </p>
       <div className="mt-4 space-y-3">
         <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">

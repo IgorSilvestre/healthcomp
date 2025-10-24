@@ -2,17 +2,33 @@
 
 import { revalidatePath } from "next/cache";
 import type { ActionState } from "@/lib/action-state";
-import { addHistoryEntry, addSchedule, markDoseTaken, getScheduleById, updateSchedule, deleteSchedule } from "@/lib/care-log";
-import { addMedicationToCatalog, deleteMedicationFromCatalog } from "@/lib/medications";
-import { addRestriction, deleteRestriction as deleteRestrictionFromStore } from "@/lib/restrictions";
+import {
+  addHistoryEntry,
+  addSchedule,
+  markDoseTaken,
+  getScheduleById,
+  updateSchedule,
+  deleteSchedule,
+} from "@/lib/care-log";
+import {
+  addMedicationToCatalog,
+  deleteMedicationFromCatalog,
+} from "@/lib/medications";
+import {
+  addRestriction,
+  deleteRestriction as deleteRestrictionFromStore,
+} from "@/lib/restrictions";
+import { parseInAppTimeZone } from "@/lib/datetime";
 import type { Purpose } from "@/lib/constants";
 
-function parseDateInput(value: FormDataEntryValue | null) {
+function parseDateInput(
+  value: FormDataEntryValue | null,
+  options?: { endOfDay?: boolean },
+) {
   if (!value) return Date.now();
-  const stringValue = value.toString();
+  const stringValue = value.toString().trim();
   if (!stringValue) return Date.now();
-  const parsed = new Date(stringValue).getTime();
-  return Number.isNaN(parsed) ? Date.now() : parsed;
+  return parseInAppTimeZone(stringValue, options);
 }
 
 export async function createMedicationEntry(
@@ -53,7 +69,9 @@ export async function createCatalogMedication(
   formData: FormData,
 ): Promise<ActionState> {
   const name = formData.get("name")?.toString().trim() ?? "";
-  const purpose = formData.get("purpose")?.toString().trim() as Purpose | undefined;
+  const purpose = formData.get("purpose")?.toString().trim() as
+    | Purpose
+    | undefined;
   if (!name) {
     return { status: "error", message: "Nome do medicamento é obrigatório." };
   }
@@ -63,7 +81,13 @@ export async function createCatalogMedication(
   try {
     await addMedicationToCatalog({ name, purpose });
   } catch (e) {
-    return { status: "error", message: e instanceof Error ? e.message : "Não foi possível adicionar o medicamento." };
+    return {
+      status: "error",
+      message:
+        e instanceof Error
+          ? e.message
+          : "Não foi possível adicionar o medicamento.",
+    };
   }
   revalidatePath("/list-medication");
   revalidatePath("/medication");
@@ -134,7 +158,8 @@ export async function createSchedule(
   if (!Number.isFinite(frequencyRaw) || frequencyRaw <= 0) {
     return {
       status: "error",
-      message: "Informe com que frequência o medicamento deve ser administrado.",
+      message:
+        "Informe com que frequência o medicamento deve ser administrado.",
     };
   }
 
@@ -144,19 +169,11 @@ export async function createSchedule(
   const frequencyMs = frequencyRaw * multiplier;
   const startAt = parseDateInput(formData.get("startAt"));
   const endAtEntry = formData.get("endAt");
-  let endAt: number | undefined = undefined;
+  let endAt: number | undefined;
   if (endAtEntry) {
     const raw = endAtEntry.toString().trim();
     if (raw) {
-      // If the input is a date-only (YYYY-MM-DD), interpret it as local end-of-day
-      if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
-        const [y, m, d] = raw.split("-").map((v) => Number(v));
-        const endOfDay = new Date(y, m - 1, d, 23, 59, 59, 999).getTime();
-        endAt = endOfDay;
-      } else {
-        // Fallback: parse full datetime
-        endAt = parseDateInput(endAtEntry);
-      }
+      endAt = parseDateInput(endAtEntry, { endOfDay: true });
     }
   }
 
@@ -215,7 +232,9 @@ export async function logDose(
     return {
       status: "error",
       message:
-        error instanceof Error ? error.message : "Não foi possível registrar a dose.",
+        error instanceof Error
+          ? error.message
+          : "Não foi possível registrar a dose.",
     };
   }
 
@@ -248,14 +267,17 @@ export async function dismissDose(
     type: "medication",
     medicationName: schedule.medicationName,
     dosage: schedule.dosage,
-    note: reason && reason.length ? `Dose dispensada: ${reason}` : "Dose dispensada",
+    note: reason?.length ? `Dose dispensada: ${reason}` : "Dose dispensada",
     author,
     createdAt,
     scheduleId,
   });
 
   revalidatePath("/");
-  return { status: "success", message: "Dose dispensada registrada no histórico." };
+  return {
+    status: "success",
+    message: "Dose dispensada registrada no histórico.",
+  };
 }
 
 // Wrappers para uso direto em <form action={...}> (assinatura de 1 argumento)
@@ -282,20 +304,22 @@ export async function updateScheduleAction(
   }
 
   const medicationName =
-    formData.get("scheduleMedicationName")?.toString().trim() ?? existing.medicationName;
+    formData.get("scheduleMedicationName")?.toString().trim() ??
+    existing.medicationName;
   if (!medicationName) {
     return { status: "error", message: "Nome do medicamento é obrigatório." };
   }
 
   const frequencyRaw = Number(
-    formData.get("frequencyValue")?.toString().trim() ?? ""
+    formData.get("frequencyValue")?.toString().trim() ?? "",
   );
   const frequencyUnit =
     formData.get("frequencyUnit")?.toString().trim() || "hours";
   const multiplier = frequencyUnit === "minutes" ? 60_000 : 3_600_000;
-  const frequencyMs = Number.isFinite(frequencyRaw) && frequencyRaw > 0
-    ? frequencyRaw * multiplier
-    : existing.frequencyMs;
+  const frequencyMs =
+    Number.isFinite(frequencyRaw) && frequencyRaw > 0
+      ? frequencyRaw * multiplier
+      : existing.frequencyMs;
 
   const startAt = formData.get("startAt")
     ? parseDateInput(formData.get("startAt"))
@@ -307,11 +331,8 @@ export async function updateScheduleAction(
     const raw = endAtEntry.toString().trim();
     if (!raw) {
       endAt = undefined;
-    } else if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
-      const [y, m, d] = raw.split("-").map((v) => Number(v));
-      endAt = new Date(y, m - 1, d, 23, 59, 59, 999).getTime();
     } else {
-      endAt = parseDateInput(endAtEntry);
+      endAt = parseDateInput(endAtEntry, { endOfDay: true });
     }
   }
 
@@ -326,9 +347,10 @@ export async function updateScheduleAction(
   const notes = formData.get("scheduleNotes")?.toString().trim();
 
   const lastTakenAtEntry = formData.get("lastTakenAt");
-  const lastTakenAt = lastTakenAtEntry && lastTakenAtEntry.toString().trim()
-    ? parseDateInput(lastTakenAtEntry)
-    : undefined;
+  const lastTakenAt =
+    lastTakenAtEntry && lastTakenAtEntry.toString().trim()
+      ? parseDateInput(lastTakenAtEntry)
+      : undefined;
 
   await updateSchedule({
     ...existing,
@@ -366,7 +388,9 @@ export async function createRestriction(
   _prevState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  const categoria = (formData.get("categoria")?.toString().trim() ?? "") as "alimento" | "atividade";
+  const categoria = (formData.get("categoria")?.toString().trim() ?? "") as
+    | "alimento"
+    | "atividade";
   const titulo = formData.get("titulo")?.toString().trim() ?? "";
   const detalhes = formData.get("detalhes")?.toString().trim() || undefined;
 
@@ -380,7 +404,10 @@ export async function createRestriction(
   try {
     await addRestriction({ categoria, titulo, detalhes });
   } catch (e) {
-    return { status: "error", message: e instanceof Error ? e.message : "Não foi possível salvar." };
+    return {
+      status: "error",
+      message: e instanceof Error ? e.message : "Não foi possível salvar.",
+    };
   }
 
   revalidatePath("/restrictions");

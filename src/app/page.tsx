@@ -1,12 +1,12 @@
-import { type HistoryEntry, getHistory, getSchedules, getNextDoseTimestamp, type Schedule } from "@/lib/care-log";
+import {
+  type HistoryEntry,
+  getHistory,
+  getSchedules,
+  getNextDoseTimestamp,
+  type Schedule,
+} from "@/lib/care-log";
+import { formatDateTime } from "@/lib/datetime";
 import { logDoseSubmit, dismissDoseSubmit } from "./actions";
-
-function formatDateTime(value: number, locale: string | string[] = "default") {
-  return new Intl.DateTimeFormat(locale, {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(value));
-}
 
 function formatRelativeTime(
   milliseconds: number,
@@ -98,7 +98,9 @@ function HistoryCard({
         <div className="relative mt-4 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
           <span className="inline-flex items-center gap-2 rounded-full bg-slate-900/5 px-3 py-1 dark:bg-white/5">
             <span aria-hidden>💊</span>
-            {entry.author ? `Registrado por ${entry.author}` : "Dose registrada"}
+            {entry.author
+              ? `Registrado por ${entry.author}`
+              : "Dose registrada"}
           </span>
         </div>
       </article>
@@ -160,35 +162,67 @@ export default async function Home() {
         {due.length > 0 && (
           <section className="rounded-3xl border border-amber-300/70 bg-gradient-to-br from-amber-50/80 via-white to-white p-6 shadow-lg shadow-amber-100/50 backdrop-blur dark:border-amber-700/40 dark:from-amber-900/40 dark:via-slate-900 dark:to-slate-950">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-amber-800 dark:text-amber-200">Doses próximas</h2>
-              <span className="text-xs uppercase tracking-wide text-amber-700/80 dark:text-amber-300/80">Atrasadas e próximas (até +10 min)</span>
+              <h2 className="text-xl font-semibold text-amber-800 dark:text-amber-200">
+                Doses próximas
+              </h2>
+              <span className="text-xs uppercase tracking-wide text-amber-700/80 dark:text-amber-300/80">
+                Atrasadas e próximas (até +10 min)
+              </span>
             </div>
             <div className="mt-4 space-y-3">
               {due.map(({ schedule, next }) => (
-                <article key={schedule.id} className="relative overflow-hidden rounded-2xl border border-amber-200/70 bg-white/90 p-4 shadow-sm dark:border-amber-700/40 dark:bg-slate-900/70">
+                <article
+                  key={schedule.id}
+                  className="relative overflow-hidden rounded-2xl border border-amber-200/70 bg-white/90 p-4 shadow-sm dark:border-amber-700/40 dark:bg-slate-900/70"
+                >
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:bg-amber-500/20 dark:text-amber-200">Agora</span>
-                        <span className="text-xs text-amber-800 dark:text-amber-200">{formatDateTime(next, locale)} ({formatRelativeTime(next - now, relativeFormatter)})</span>
+                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:bg-amber-500/20 dark:text-amber-200">
+                          Agora
+                        </span>
+                        <span className="text-xs text-amber-800 dark:text-amber-200">
+                          {formatDateTime(next, locale)} (
+                          {formatRelativeTime(next - now, relativeFormatter)})
+                        </span>
                       </div>
-                      <h3 className="mt-1 text-base font-semibold text-slate-900 dark:text-white">{schedule.medicationName}</h3>
+                      <h3 className="mt-1 text-base font-semibold text-slate-900 dark:text-white">
+                        {schedule.medicationName}
+                      </h3>
                       {schedule.dosage && (
-                        <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Dose: {schedule.dosage}</p>
+                        <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                          Dose: {schedule.dosage}
+                        </p>
                       )}
                     </div>
                     <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
                       <form action={logDoseSubmit} className="contents">
-                        <input type="hidden" name="scheduleId" value={schedule.id} />
+                        <input
+                          type="hidden"
+                          name="scheduleId"
+                          value={schedule.id}
+                        />
                         <input type="hidden" name="takenAt" value={now} />
-                        <button type="submit" className="cursor-pointer flex-1 rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 sm:flex-none">Dar dose</button>
+                        <button
+                          type="submit"
+                          className="cursor-pointer flex-1 rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 sm:flex-none"
+                        >
+                          Dar dose
+                        </button>
                       </form>
                       <form action={dismissDoseSubmit} className="contents">
-                        <input type="hidden" name="scheduleId" value={schedule.id} />
+                        <input
+                          type="hidden"
+                          name="scheduleId"
+                          value={schedule.id}
+                        />
                         <input type="hidden" name="createdAt" value={now} />
-                          <button type="submit"
-                                  className="cursor-pointer flex-1 rounded-full bg-red-200 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-300 dark:bg-red-950 dark:text-red-200 dark:hover:bg-red-900 sm:flex-none">Dispensar
-                          </button>
+                        <button
+                          type="submit"
+                          className="cursor-pointer flex-1 rounded-full bg-red-200 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-300 dark:bg-red-950 dark:text-red-200 dark:hover:bg-red-900 sm:flex-none"
+                        >
+                          Dispensar
+                        </button>
                       </form>
                     </div>
                   </div>
@@ -200,8 +234,12 @@ export default async function Home() {
 
         <section className="rounded-3xl border border-white/85 bg-white/85 p-6 shadow-lg shadow-slate-100/50 backdrop-blur dark:border-white/10 dark:bg-slate-900/70 dark:shadow-none">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Histórico</h2>
-            <span className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Mais recente primeiro</span>
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+              Histórico
+            </h2>
+            <span className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              Mais recente primeiro
+            </span>
           </div>
           <div className="mt-6 space-y-4">
             {history.length === 0 ? (

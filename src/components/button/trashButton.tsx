@@ -5,10 +5,7 @@ type Props = {
   className?: string;
 };
 
-export function TrashButton({
-  type = "submit",
-  className = "",
-}: Props) {
+export function TrashButton({ type = "submit", className = "" }: Props) {
   return (
     <button
       type={type}
@@ -25,7 +22,11 @@ export function TrashButton({
         className="h-5 w-5"
         aria-hidden="true"
       >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-9 0l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M10 11v6m4-6v6" />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-9 0l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M10 11v6m4-6v6"
+        />
       </svg>
     </button>
   );

@@ -5,14 +5,23 @@ import { deleteScheduleAction } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
 import { TrashButton } from "@/components/button/trashButton";
 
-export default function DeleteScheduleForm({ scheduleId }: { scheduleId: string }) {
-  const [, formAction] = useActionState(deleteScheduleAction, defaultActionState);
+export default function DeleteScheduleForm({
+  scheduleId,
+}: {
+  scheduleId: string;
+}) {
+  const [, formAction] = useActionState(
+    deleteScheduleAction,
+    defaultActionState,
+  );
 
   return (
     <form
       action={async (formData: FormData) => {
         if (typeof window !== "undefined") {
-          const ok = window.confirm("Tem certeza que deseja excluir este agendamento? Esta ação não pode ser desfeita.");
+          const ok = window.confirm(
+            "Tem certeza que deseja excluir este agendamento? Esta ação não pode ser desfeita.",
+          );
           if (!ok) return;
         }
         return formAction(formData);

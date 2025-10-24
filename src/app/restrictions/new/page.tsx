@@ -1,4 +1,4 @@
-import {RestrictionForm} from "@/components/forms/restriction-form";
+import { RestrictionForm } from "@/components/forms/restriction-form";
 
 export default async function NewRestrictionPage() {
   return (

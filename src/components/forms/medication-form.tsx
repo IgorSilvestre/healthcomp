@@ -7,7 +7,11 @@ import { SubmitButton } from "@/components/forms/submit-button";
 
 import type { MedicationCatalogItem } from "@/lib/medications";
 
-export function MedicationForm({ medications = [] as MedicationCatalogItem[] }: { medications?: MedicationCatalogItem[] }) {
+export function MedicationForm({
+  medications = [] as MedicationCatalogItem[],
+}: {
+  medications?: MedicationCatalogItem[];
+}) {
   const [state, formAction] = useActionState(
     createMedicationEntry,
     defaultActionState,
@@ -42,7 +46,9 @@ export function MedicationForm({ medications = [] as MedicationCatalogItem[] }: 
               className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
               defaultValue=""
             >
-              <option value="" disabled>Selecione um medicamento</option>
+              <option value="" disabled>
+                Selecione um medicamento
+              </option>
               {medications.map((m) => (
                 <option key={m.id} value={m.name}>
                   {m.name} ({m.purpose})
@@ -57,7 +63,13 @@ export function MedicationForm({ medications = [] as MedicationCatalogItem[] }: 
                 placeholder="ex.: Amoxicilina 500 mg"
                 className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
               />
-              <span className="text-xs font-normal text-slate-500 dark:text-slate-400">Dica: cadastre medicamentos em <a className="underline" href="/medicamentos">Medicamentos</a> para selecionar aqui.</span>
+              <span className="text-xs font-normal text-slate-500 dark:text-slate-400">
+                Dica: cadastre medicamentos em{" "}
+                <a className="underline" href="/medicamentos">
+                  Medicamentos
+                </a>{" "}
+                para selecionar aqui.
+              </span>
             </>
           )}
         </label>

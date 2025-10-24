@@ -6,7 +6,10 @@ import { defaultActionState } from "@/lib/action-state";
 import { SubmitButton } from "@/components/forms/submit-button";
 
 export function RestrictionForm() {
-  const [state, formAction] = useActionState(createRestriction, defaultActionState);
+  const [state, formAction] = useActionState(
+    createRestriction,
+    defaultActionState,
+  );
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {

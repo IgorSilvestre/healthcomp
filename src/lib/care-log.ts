@@ -124,11 +124,7 @@ export async function getScheduleById(id: string) {
 }
 
 export async function deleteSchedule(id: string) {
-  await redis
-    .multi()
-    .srem(SCHEDULE_IDS_KEY, id)
-    .del(scheduleKey(id))
-    .exec();
+  await redis.multi().srem(SCHEDULE_IDS_KEY, id).del(scheduleKey(id)).exec();
   return true;
 }
 
