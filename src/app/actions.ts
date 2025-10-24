@@ -100,6 +100,18 @@ export async function createSchedule(
   const multiplier = frequencyUnit === "minutes" ? 60_000 : 3_600_000;
   const frequencyMs = frequencyRaw * multiplier;
   const startAt = parseDateInput(formData.get("startAt"));
+  const endAtEntry = formData.get("endAt");
+  const endAt = endAtEntry && endAtEntry.toString().trim() !== ""
+    ? parseDateInput(endAtEntry)
+    : undefined;
+
+  if (endAt !== undefined && endAt < startAt) {
+    return {
+      status: "error",
+      message: "Deadline must be equal to or after the start date/time.",
+    };
+  }
+
   const dosage = formData.get("scheduleDosage")?.toString().trim() || undefined;
   const notes = formData.get("scheduleNotes")?.toString().trim() || undefined;
 
@@ -113,6 +125,7 @@ export async function createSchedule(
     dosage,
     frequencyMs,
     startAt,
+    endAt,
     lastTakenAt,
     notes,
   });

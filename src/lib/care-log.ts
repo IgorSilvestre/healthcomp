@@ -47,6 +47,7 @@ export interface Schedule {
   dosage?: string;
   frequencyMs: number;
   startAt: number;
+  endAt?: number;
   lastTakenAt?: number;
   notes?: string;
 }
@@ -153,5 +154,15 @@ export async function markDoseTaken(
 
 export function getNextDoseTimestamp(schedule: Schedule) {
   const base = schedule.lastTakenAt ?? schedule.startAt;
-  return base + schedule.frequencyMs;
+  const next = base + schedule.frequencyMs;
+  if (schedule.endAt !== undefined) {
+    // If the schedule has a deadline and the next dose would be after it, signal no more doses.
+    if (next > schedule.endAt) return NaN;
+    // If we're already past the endAt, also signal none
+    if (Date.now() > schedule.endAt && next <= schedule.endAt) {
+      // Even if next would be before endAt theoretically, being past endAt means schedule is over
+      return NaN;
+    }
+  }
+  return next;
 }
