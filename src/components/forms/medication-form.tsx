@@ -100,7 +100,7 @@ export function MedicationForm() {
           {state.message}
         </p>
       )}
-      <SubmitButton label="Add medication entry" />
+      <SubmitButton label="Salvar" />
     </form>
   );
 }
