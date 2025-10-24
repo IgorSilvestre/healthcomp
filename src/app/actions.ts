@@ -101,14 +101,26 @@ export async function createSchedule(
   const frequencyMs = frequencyRaw * multiplier;
   const startAt = parseDateInput(formData.get("startAt"));
   const endAtEntry = formData.get("endAt");
-  const endAt = endAtEntry && endAtEntry.toString().trim() !== ""
-    ? parseDateInput(endAtEntry)
-    : undefined;
+  let endAt: number | undefined = undefined;
+  if (endAtEntry) {
+    const raw = endAtEntry.toString().trim();
+    if (raw) {
+      // If the input is a date-only (YYYY-MM-DD), interpret it as local end-of-day
+      if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+        const [y, m, d] = raw.split("-").map((v) => Number(v));
+        const endOfDay = new Date(y, m - 1, d, 23, 59, 59, 999).getTime();
+        endAt = endOfDay;
+      } else {
+        // Fallback: parse full datetime
+        endAt = parseDateInput(endAtEntry);
+      }
+    }
+  }
 
   if (endAt !== undefined && endAt < startAt) {
     return {
       status: "error",
-      message: "Deadline must be equal to or after the start date/time.",
+      message: "Deadline day must be on or after the start date.",
     };
   }
 
