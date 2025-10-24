@@ -38,9 +38,26 @@ export default async function RestrictionsPage() {
                       <div className="mt-1 text-xs text-slate-600 dark:text-slate-300">{r.detalhes}</div>
                     )}
                   </div>
-                  <form action={deleteRestriction}>
+                  <form action={deleteRestriction} className="ml-3">
                     <input type="hidden" name="id" value={r.id} />
-                    <SubmitButton variant="danger" label="Excluir" />
+                    <button
+                      type="submit"
+                      aria-label="Excluir"
+                      title="Excluir"
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-full text-red-600 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:hover:bg-red-950"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        className="h-5 w-5"
+                      >
+                        <title>Excluir restrição</title>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-9 0l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M10 11v6m4-6v6" />
+                      </svg>
+                    </button>
                   </form>
                 </li>
               ))}
