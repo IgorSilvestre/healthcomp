@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Criar App Next",
-  description: "Gerado pelo create next app",
+  title: "Saúde Célio",
+  description: "Acompanhamento de cuidado do nosso velinho",
 };
 
 export default function RootLayout({
@@ -30,7 +30,7 @@ export default function RootLayout({
       >
         <nav className="sticky top-0 z-10 border-b border-white/40 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-900/70">
           <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-            <Link href="/" className="text-sm font-semibold text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white">
+            <Link href="/" className="text-sm font-semibold text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white mr-4">
               Home
             </Link>
             <div className="flex items-center gap-3 text-sm">
