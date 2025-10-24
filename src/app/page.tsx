@@ -150,7 +150,8 @@ export default async function Home() {
   const due = schedules
     .map((s) => ({ schedule: s, next: getNextDoseTimestamp(s) }))
     .filter(({ next }) => !Number.isNaN(next))
-    .filter(({ next }) => Math.abs(next - now) <= DUE_WINDOW_MS)
+    // Incluir todas as atrasadas e as próximas em até +10 minutos
+    .filter(({ next }) => next <= now + DUE_WINDOW_MS)
     .sort((a, b) => a.next - b.next);
 
   return (
@@ -160,7 +161,7 @@ export default async function Home() {
           <section className="rounded-3xl border border-amber-300/70 bg-gradient-to-br from-amber-50/80 via-white to-white p-6 shadow-lg shadow-amber-100/50 backdrop-blur dark:border-amber-700/40 dark:from-amber-900/40 dark:via-slate-900 dark:to-slate-950">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-amber-800 dark:text-amber-200">Doses próximas</h2>
-              <span className="text-xs uppercase tracking-wide text-amber-700/80 dark:text-amber-300/80">± 10 minutos</span>
+              <span className="text-xs uppercase tracking-wide text-amber-700/80 dark:text-amber-300/80">Atrasadas e próximas (até +10 min)</span>
             </div>
             <div className="mt-4 space-y-3">
               {due.map(({ schedule, next }) => (
