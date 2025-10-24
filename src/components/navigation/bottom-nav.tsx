@@ -135,7 +135,7 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-20 border-t border-white/40 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:border-white/10 dark:bg-slate-900/70 sm:hidden"
+      className="fixed inset-x-0 bottom-0 z-20 border-t border-white/40 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 dark:border-white/10 dark:bg-slate-900/70 sm:hidden mb-2"
       style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0px)" }}
       aria-label="Navegação inferior"
     >
