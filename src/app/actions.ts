@@ -203,6 +203,7 @@ export async function createSchedule(
   });
 
   revalidatePath("/");
+  revalidatePath("/schedule");
 
   return {
     status: "success",

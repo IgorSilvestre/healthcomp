@@ -7,6 +7,8 @@ import {
 import { formatDateTime } from "@/lib/datetime";
 import NotificationsScheduler from "@/components/notifications-scheduler";
 
+export const dynamic = "force-dynamic";
+
 function formatRelativeTime(
   milliseconds: number,
   formatter: Intl.RelativeTimeFormat,
