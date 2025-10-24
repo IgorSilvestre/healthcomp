@@ -1,6 +1,5 @@
 import { getScheduleById } from "@/lib/care-log";
 import EditScheduleForm from "@/components/forms/edit-schedule-form";
-import Link from "next/link";
 
 export default async function EditSchedulePage({ params }: { params: { id: string } }) {
   const schedule = await getScheduleById(params.id);
