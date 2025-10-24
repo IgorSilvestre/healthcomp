@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import SWRegister from "./sw-register";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,6 +17,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Saúde Célio",
   description: "Acompanhamento de cuidado do nosso velinho",
+  manifest: "/manifest.webmanifest",
+  themeColor: "#0ea5e9",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
+  applicationName: "Saúde Célio",
 };
 
 export default function RootLayout({
@@ -47,6 +56,7 @@ export default function RootLayout({
           </div>
         </nav>
         {children}
+        <SWRegister />
       </body>
     </html>
   );
