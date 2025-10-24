@@ -2,8 +2,9 @@ import { getScheduleById } from "@/lib/care-log";
 import EditScheduleForm from "@/components/forms/edit-schedule-form";
 import { getMedications } from "@/lib/medications";
 
-export default async function EditSchedulePage({ params }: { params: { id: string } }) {
-  const schedule = await getScheduleById(params.id);
+export default async function EditSchedulePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const schedule = await getScheduleById(id);
   const medications = await getMedications();
 
   return (
