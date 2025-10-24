@@ -139,7 +139,7 @@ function HistoryCard({
 export default async function Home() {
   const history = await getHistory();
   const now = Date.now();
-  const locale = "default";
+  const locale = "pt-BR";
   const relativeFormatter = new Intl.RelativeTimeFormat(locale, {
     numeric: "auto",
   });
