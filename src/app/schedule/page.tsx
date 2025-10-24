@@ -91,7 +91,7 @@ export default async function SchedulePage() {
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Agendamentos</h1>
           <Link href="/schedule/new" className="rounded-full bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700">
-            Novo agendamento
+            Novo Agendamento
           </Link>
         </div>
 
