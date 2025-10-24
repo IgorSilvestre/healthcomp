@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SWRegister from "./sw-register";
+import BottomNav from "@/components/navigation/bottom-nav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,7 +42,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <nav className="sticky top-0 z-10 border-b border-white/40 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-900/70">
+        <nav className="sticky top-0 z-10 hidden border-b border-white/40 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-900/70 sm:block">
           <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-y-2 px-2 py-2 sm:flex-nowrap sm:px-6 sm:py-4 lg:px-8">
             <Link href="/" className="text-xs font-semibold text-slate-700 hover:text-slate-900 dark:text-slate-200 dark:hover:text-white sm:text-sm">
               Home
@@ -59,7 +60,8 @@ export default function RootLayout({
             </div>
           </div>
         </nav>
-        {children}
+        <main className="pb-16 sm:pb-0">{children}</main>
+        <BottomNav />
         <SWRegister />
       </body>
     </html>
