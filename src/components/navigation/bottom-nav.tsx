@@ -19,7 +19,7 @@ const items: Item[] = [
         aria-hidden="true"
         viewBox="0 0 24 24"
         className="h-6 w-6"
-        fill={active ? "currentColor" : "none"}
+        fill="none"
         stroke="currentColor"
         strokeWidth={1.8}
       >
@@ -40,7 +40,7 @@ const items: Item[] = [
         aria-hidden="true"
         viewBox="0 0 24 24"
         className="h-6 w-6"
-        fill={active ? "currentColor" : "none"}
+        fill="none"
         stroke="currentColor"
         strokeWidth={1.8}
       >
@@ -62,7 +62,7 @@ const items: Item[] = [
         aria-hidden="true"
         viewBox="0 0 24 24"
         className="h-6 w-6"
-        fill={active ? "currentColor" : "none"}
+        fill="none"
         stroke="currentColor"
         strokeWidth={1.8}
       >
@@ -75,20 +75,21 @@ const items: Item[] = [
     ),
   },
   {
-    href: "/medication-list",
+    href: "/list-medication",
     label: "Medicamentos",
     icon: (active: boolean) => (
       <svg
         aria-hidden="true"
         viewBox="0 0 24 24"
         className="h-6 w-6"
-        fill={active ? "currentColor" : "none"}
+        fill="none"
         stroke="currentColor"
         strokeWidth={1.8}
       >
-        <rect x="3" y="4" width="8" height="16" rx="2" />
-        <path d="M5.5 8h5" strokeLinecap="round" />
-        <path d="M13 12h6M16 9v6" strokeLinecap="round" />
+        {/* Cápsula horizontal */}
+        <rect x="4" y="8" width="16" height="8" rx="4" />
+        {/* Divisão da cápsula */}
+        <path d="M12 8v8" strokeLinecap="round" />
       </svg>
     ),
   },
@@ -100,7 +101,7 @@ const items: Item[] = [
         aria-hidden="true"
         viewBox="0 0 24 24"
         className="h-6 w-6"
-        fill={active ? "currentColor" : "none"}
+        fill="none"
         stroke="currentColor"
         strokeWidth={1.8}
       >
@@ -118,7 +119,7 @@ const items: Item[] = [
         aria-hidden="true"
         viewBox="0 0 24 24"
         className="h-6 w-6"
-        fill={active ? "currentColor" : "none"}
+        fill="none"
         stroke="currentColor"
         strokeWidth={1.8}
       >
@@ -153,7 +154,7 @@ export default function BottomNav() {
                 aria-current={active ? "page" : undefined}
                 aria-label={label}
               >
-                <span className="flex items-center justify-center">
+                <span className={`flex items-center justify-center rounded-full p-1 ${active ? "ring-2 ring-sky-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900" : ""}`}>
                   {icon(active)}
                 </span>
                 <span className="sr-only">{label}</span>
