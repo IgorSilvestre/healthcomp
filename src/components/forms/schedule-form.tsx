@@ -1,22 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { createSchedule } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="mt-4 w-full rounded-lg bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-    >
-      {pending ? "Salvando…" : "Adicionar Agendamento"}
-    </button>
-  );
-}
+import { SubmitButton } from "@/components/forms/submit-button";
 
 export function ScheduleForm() {
   const [state, formAction] = useFormState(createSchedule, defaultActionState);
@@ -32,7 +20,7 @@ export function ScheduleForm() {
     <form
       ref={formRef}
       action={formAction}
-      className="rounded-2xl border border-emerald-100 bg-white/90 p-6 shadow-xl shadow-emerald-100/50 backdrop-blur dark:border-emerald-400/20 dark:bg-slate-900/60 dark:shadow-none"
+      className="rounded-2xl border border-white/10 bg-white/90 p-6 shadow-xl shadow-sky-100/40 backdrop-blur dark:border-white/10 dark:bg-slate-900/60 dark:shadow-none"
     >
       <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
         Adicione agendamento de medicamento
@@ -47,7 +35,7 @@ export function ScheduleForm() {
             required
             name="scheduleMedicationName"
             placeholder="e.g. Acetaminophen"
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/40"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
@@ -55,7 +43,7 @@ export function ScheduleForm() {
           <input
             name="scheduleDosage"
             placeholder="e.g. 1 capsula"
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/40"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
           />
         </label>
         <div className="grid gap-3 sm:grid-cols-[2fr_1fr]">
@@ -67,14 +55,14 @@ export function ScheduleForm() {
               type="number"
               min={1}
               placeholder="e.g. 8"
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/40"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
             />
           </label>
           <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
             Unidade
             <select
               name="frequencyUnit"
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/40"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
             >
               <option value="hours">hora</option>
               <option value="minutes">minuto</option>
@@ -87,7 +75,7 @@ export function ScheduleForm() {
             <input
               type="datetime-local"
               name="startAt"
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/40"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
             />
           </label>
           <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
@@ -95,7 +83,7 @@ export function ScheduleForm() {
             <input
               type="datetime-local"
               name="lastTakenAt"
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/40"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
             />
           </label>
         </div>
@@ -105,7 +93,7 @@ export function ScheduleForm() {
             name="scheduleNotes"
             rows={3}
             placeholder="Adicione contexto como tomar com comida ou ficar atento a tonturas."
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/40"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
           />
         </label>
       </div>
@@ -120,7 +108,7 @@ export function ScheduleForm() {
           {state.message}
         </p>
       )}
-      <SubmitButton />
+      <SubmitButton label="Adicionar Agendamento" />
     </form>
   );
 }

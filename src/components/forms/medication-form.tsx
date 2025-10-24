@@ -1,22 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { createMedicationEntry } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
-
-function SubmitButton({ label }: { label: string }) {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="mt-4 w-full rounded-lg bg-gradient-to-r from-blue-500 via-sky-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-    >
-      {pending ? "Salvando…" : label}
-    </button>
-  );
-}
+import { SubmitButton } from "@/components/forms/submit-button";
 
 export function MedicationForm() {
   const [state, formAction] = useFormState(

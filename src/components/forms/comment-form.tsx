@@ -1,22 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { createCommentEntry } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="mt-4 w-full rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white/90"
-    >
-      {pending ? "Salvando…" : "Adicionar comentário"}
-    </button>
-  );
-}
+import { SubmitButton } from "@/components/forms/submit-button";
 
 export function CommentForm() {
   const [state, formAction] = useFormState(
@@ -35,7 +23,7 @@ export function CommentForm() {
     <form
       ref={formRef}
       action={formAction}
-      className="rounded-2xl border border-slate-100 bg-white/90 p-6 shadow-lg shadow-slate-100/60 backdrop-blur dark:border-slate-700/60 dark:bg-slate-900/60 dark:shadow-none"
+      className="rounded-2xl border border-white/10 bg-white/90 p-6 shadow-xl shadow-sky-100/40 backdrop-blur dark:border-white/10 dark:bg-slate-900/60 dark:shadow-none"
     >
       <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
         Deixe um comentário
@@ -49,7 +37,7 @@ export function CommentForm() {
           <input
             name="author"
             placeholder="Seu nome"
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-slate-500 dark:focus:ring-slate-500/30"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
@@ -57,7 +45,7 @@ export function CommentForm() {
           <input
             type="datetime-local"
             name="createdAt"
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-slate-500 dark:focus:ring-slate-500/30"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
@@ -67,7 +55,7 @@ export function CommentForm() {
             name="message"
             rows={4}
             placeholder="O paciente descansou bem, sem febre. Lembre-se de verificar a hidratação."
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-slate-500 dark:focus:ring-slate-500/30"
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
           />
         </label>
       </div>
@@ -82,7 +70,7 @@ export function CommentForm() {
           {state.message}
         </p>
       )}
-      <SubmitButton />
+      <SubmitButton label="Adicionar comentário" />
     </form>
   );
 }
