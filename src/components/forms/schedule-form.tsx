@@ -35,14 +35,14 @@ export function ScheduleForm() {
       className="rounded-2xl border border-emerald-100 bg-white/90 p-6 shadow-xl shadow-emerald-100/50 backdrop-blur dark:border-emerald-400/20 dark:bg-slate-900/60 dark:shadow-none"
     >
       <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-        Add Medication Schedule
+        Adicione agendamento de medicamento
       </h2>
       <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-        Define recurring medications so everyone always sees the next dose.
+        Defina doses recorrentes para ficarem agendadas
       </p>
       <div className="mt-4 space-y-3">
         <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-          Medication name
+          Nome Medicamento
           <input
             required
             name="scheduleMedicationName"
@@ -60,7 +60,7 @@ export function ScheduleForm() {
         </label>
         <div className="grid gap-3 sm:grid-cols-[2fr_1fr]">
           <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-            Frequency
+            Frequência
             <input
               required
               name="frequencyValue"
@@ -71,19 +71,19 @@ export function ScheduleForm() {
             />
           </label>
           <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-            Unit
+            Unidade
             <select
               name="frequencyUnit"
               className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-emerald-400 dark:focus:ring-emerald-400/40"
             >
-              <option value="hours">hours</option>
-              <option value="minutes">minutes</option>
+              <option value="hours">hora</option>
+              <option value="minutes">minuto</option>
             </select>
           </label>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-            First dose (defaults to now)
+            Primeira dose (Padrão é agora)
             <input
               type="datetime-local"
               name="startAt"
@@ -91,7 +91,7 @@ export function ScheduleForm() {
             />
           </label>
           <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-            Last taken (optional)
+            Ultima vez tomado (opcional)
             <input
               type="datetime-local"
               name="lastTakenAt"
@@ -100,7 +100,7 @@ export function ScheduleForm() {
           </label>
         </div>
         <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-          Notes (optional)
+          Notas (opcional)
           <textarea
             name="scheduleNotes"
             rows={3}
