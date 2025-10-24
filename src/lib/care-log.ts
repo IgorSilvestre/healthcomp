@@ -162,16 +162,40 @@ export async function markDoseTaken(
 }
 
 export function getNextDoseTimestamp(schedule: Schedule) {
-  const base = schedule.lastTakenAt ?? schedule.startAt;
-  const next = base + schedule.frequencyMs;
-  if (schedule.endAt !== undefined) {
-    // If the schedule has a deadline and the next dose would be after it, signal no more doses.
-    if (next > schedule.endAt) return NaN;
-    // If we're already past the endAt, also signal none
-    if (Date.now() > schedule.endAt && next <= schedule.endAt) {
-      // Even if next would be before endAt theoretically, being past endAt means schedule is over
-      return NaN;
+  const { frequencyMs, startAt, lastTakenAt, endAt } = schedule;
+  const now = Date.now();
+
+  // If schedule has an end and we're already past it, nothing else is due
+  if (endAt !== undefined && now > endAt) {
+    return NaN;
+  }
+
+  let next: number;
+
+  if (lastTakenAt === undefined) {
+    // First dose logic: the next dose is the start time if still in the future
+    if (now <= startAt) {
+      next = startAt;
+    } else {
+      // We are past the start; advance in frequency steps until >= now
+      const elapsed = now - startAt;
+      const steps = Math.ceil(elapsed / frequencyMs);
+      next = startAt + steps * frequencyMs;
+    }
+  } else {
+    if (lastTakenAt >= now) {
+      next = lastTakenAt + frequencyMs;
+    } else {
+      const elapsed = now - lastTakenAt;
+      const steps = Math.ceil(elapsed / frequencyMs);
+      next = lastTakenAt + steps * frequencyMs;
     }
   }
+
+  // Respect endAt if present
+  if (endAt !== undefined && next > endAt) {
+    return NaN;
+  }
+
   return next;
 }

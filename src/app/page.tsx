@@ -180,12 +180,14 @@ export default async function Home() {
                       <form action={logDoseSubmit} className="contents">
                         <input type="hidden" name="scheduleId" value={schedule.id} />
                         <input type="hidden" name="takenAt" value={now} />
-                        <button type="submit" className="flex-1 rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 sm:flex-none">Dar dose</button>
+                        <button type="submit" className="cursor-pointer flex-1 rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 sm:flex-none">Dar dose</button>
                       </form>
                       <form action={dismissDoseSubmit} className="contents">
                         <input type="hidden" name="scheduleId" value={schedule.id} />
                         <input type="hidden" name="createdAt" value={now} />
-                        <button type="submit" className="flex-1 rounded-full bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 sm:flex-none">Dispensar</button>
+                          <button type="submit"
+                                  className="cursor-pointer flex-1 rounded-full bg-red-200 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-300 dark:bg-red-950 dark:text-red-200 dark:hover:bg-red-900 sm:flex-none">Dispensar
+                          </button>
                       </form>
                     </div>
                   </div>
