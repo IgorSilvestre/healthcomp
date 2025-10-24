@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import type { ActionState } from "@/lib/action-state";
 import { addHistoryEntry, addSchedule, markDoseTaken, getScheduleById, updateSchedule, deleteSchedule } from "@/lib/care-log";
+import { addMedicationToCatalog, deleteMedicationFromCatalog, type Purpose } from "@/lib/medications";
 
 function parseDateInput(value: FormDataEntryValue | null) {
   if (!value) return Date.now();
@@ -21,7 +22,7 @@ export async function createMedicationEntry(
   if (!medicationName) {
     return {
       status: "error",
-      message: "Medication name is required.",
+      message: "Nome do medicamento é obrigatório.",
     };
   }
 
@@ -41,8 +42,48 @@ export async function createMedicationEntry(
   revalidatePath("/");
   return {
     status: "success",
-    message: "Medication added to history.",
+    message: "Medicação registrada no histórico.",
   };
+}
+
+export async function createCatalogMedication(
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const name = formData.get("name")?.toString().trim() ?? "";
+  const purpose = formData.get("purpose")?.toString().trim() as Purpose | undefined;
+  if (!name) {
+    return { status: "error", message: "Nome do medicamento é obrigatório." };
+  }
+  if (!purpose) {
+    return { status: "error", message: "Selecione um propósito." };
+  }
+  try {
+    await addMedicationToCatalog({ name, purpose });
+  } catch (e) {
+    return { status: "error", message: e instanceof Error ? e.message : "Não foi possível adicionar o medicamento." };
+  }
+  revalidatePath("/medicamentos");
+  revalidatePath("/medication");
+  revalidatePath("/schedule");
+  return { status: "success", message: "Medicamento adicionado ao catálogo." };
+}
+
+export async function deleteCatalogMedication(
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const id = formData.get("id")?.toString();
+  if (!id) return { status: "error", message: "ID inválido." };
+  try {
+    await deleteMedicationFromCatalog(id);
+  } catch {
+    return { status: "error", message: "Não foi possível excluir." };
+  }
+  revalidatePath("/medicamentos");
+  revalidatePath("/medication");
+  revalidatePath("/schedule");
+  return { status: "success", message: "Excluído." };
 }
 
 export async function createCommentEntry(
@@ -53,7 +94,7 @@ export async function createCommentEntry(
   if (!message) {
     return {
       status: "error",
-      message: "Please write a brief comment before submitting.",
+      message: "Escreva um comentário breve antes de enviar.",
     };
   }
   const createdAt = parseDateInput(formData.get("createdAt"));
@@ -81,7 +122,7 @@ export async function createSchedule(
   if (!medicationName) {
     return {
       status: "error",
-      message: "Medication name is required for a schedule.",
+      message: "Nome do medicamento é obrigatório para um agendamento.",
     };
   }
 
@@ -91,7 +132,7 @@ export async function createSchedule(
   if (!Number.isFinite(frequencyRaw) || frequencyRaw <= 0) {
     return {
       status: "error",
-      message: "Please provide how often the medication should be taken.",
+      message: "Informe com que frequência o medicamento deve ser administrado.",
     };
   }
 
@@ -146,7 +187,7 @@ export async function createSchedule(
 
   return {
     status: "success",
-    message: "Schedule added.",
+    message: "Agendamento adicionado.",
   };
 }
 

@@ -75,6 +75,24 @@ const items: Item[] = [
     ),
   },
   {
+    href: "/medicamentos",
+    label: "Medicamentos",
+    icon: (active: boolean) => (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-6 w-6"
+        fill={active ? "currentColor" : "none"}
+        stroke="currentColor"
+        strokeWidth={1.8}
+      >
+        <rect x="3" y="4" width="8" height="16" rx="2" />
+        <path d="M5.5 8h5" strokeLinecap="round" />
+        <path d="M13 12h6M16 9v6" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
     href: "/schedule",
     label: "Agenda",
     icon: (active: boolean) => (

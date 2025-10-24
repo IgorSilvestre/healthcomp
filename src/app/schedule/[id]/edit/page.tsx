@@ -1,8 +1,10 @@
 import { getScheduleById } from "@/lib/care-log";
 import EditScheduleForm from "@/components/forms/edit-schedule-form";
+import { getMedications } from "@/lib/medications";
 
 export default async function EditSchedulePage({ params }: { params: { id: string } }) {
   const schedule = await getScheduleById(params.id);
+  const medications = await getMedications();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 text-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 dark:text-slate-100">
@@ -12,7 +14,7 @@ export default async function EditSchedulePage({ params }: { params: { id: strin
             Agendamento não encontrado. Verifique o link e tente novamente.
           </p>
         ) : (
-          <EditScheduleForm schedule={schedule} />
+          <EditScheduleForm schedule={schedule} medications={medications} />
         )}
       </main>
     </div>

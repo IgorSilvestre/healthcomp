@@ -1,10 +1,12 @@
 import { MedicationForm } from "@/components/forms/medication-form";
+import { getMedications } from "@/lib/medications";
 
-export default function MedicationPage() {
+export default async function MedicationPage() {
+  const medications = await getMedications();
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 text-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 dark:text-slate-100">
       <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
-          <MedicationForm />
+          <MedicationForm medications={medications} />
       </main>
     </div>
   );

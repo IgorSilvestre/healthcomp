@@ -5,6 +5,7 @@ import { useFormState } from "react-dom";
 import { updateScheduleAction } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
 import type { Schedule } from "@/lib/care-log";
+import type { MedicationCatalogItem } from "@/lib/medications";
 import { SubmitButton } from "@/components/forms/submit-button";
 import Link from "next/link";
 
@@ -30,7 +31,7 @@ function toLocalDateInput(ms: number) {
   return `${y}-${m}-${day}`;
 }
 
-export default function EditScheduleForm({ schedule }: { schedule: Schedule }) {
+export default function EditScheduleForm({ schedule, medications = [] as MedicationCatalogItem[] }: { schedule: Schedule; medications?: MedicationCatalogItem[] }) {
   const [state, formAction] = useFormState(updateScheduleAction, defaultActionState);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -60,13 +61,33 @@ export default function EditScheduleForm({ schedule }: { schedule: Schedule }) {
 
       <div className="mt-4 space-y-3">
         <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-          Nome Medicamento
-          <input
-            required
-            name="scheduleMedicationName"
-            defaultValue={schedule.medicationName}
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
-          />
+          Nome do medicamento
+          {medications.length > 0 ? (
+            <select
+              required
+              name="scheduleMedicationName"
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
+              defaultValue={schedule.medicationName}
+            >
+              <option value="" disabled>Selecione um medicamento</option>
+              {medications.map((m) => (
+                <option key={m.id} value={m.name}>
+                  {m.name} ({m.purpose})
+                </option>
+              ))}
+            </select>
+          ) : (
+            <>
+              <input
+                required
+                name="scheduleMedicationName"
+                defaultValue={schedule.medicationName}
+                placeholder="ex.: Acetaminofeno"
+                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-sky-500 dark:focus:ring-sky-500/40"
+              />
+              <span className="text-xs font-normal text-slate-500 dark:text-slate-400">Dica: cadastre medicamentos em <a className="underline" href="/medicamentos">Medicamentos</a> para selecionar aqui.</span>
+            </>
+          )}
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
           Dosagem (opcional)
