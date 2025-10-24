@@ -80,7 +80,7 @@ export function MedicationForm() {
             />
           </label>
           <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-            Time given
+            Horario administrado a dose
             <input
               type="datetime-local"
               name="takenAt"
