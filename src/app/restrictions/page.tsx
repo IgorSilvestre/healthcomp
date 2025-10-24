@@ -1,15 +1,6 @@
-import { RestrictionForm } from "@/components/forms/restriction-form";
 import { getRestrictions } from "@/lib/restrictions";
-import { deleteRestriction as deleteRestrictionAction } from "@/app/actions";
-import { defaultActionState } from "@/lib/action-state";
-import { SubmitButton } from "@/components/forms/submit-button";
-import { TrashButton } from "@/components/button/trashButton";
+import { DeleteRestrictionForm } from "@/components/forms/delete-restriction-form";
 import Link from "next/link";
-
-async function deleteRestriction(formData: FormData) {
-  "use server";
-  await deleteRestrictionAction(defaultActionState, formData);
-}
 
 export default async function RestrictionsPage() {
   const restrictions = await getRestrictions();
@@ -38,13 +29,7 @@ export default async function RestrictionsPage() {
                       <div className="mt-1 text-xs text-slate-600 dark:text-slate-300">{r.detalhes}</div>
                     )}
                   </div>
-                  <form action={deleteRestriction} className="ml-3">
-                    <input type="hidden" name="id" value={r.id} />
-                    <TrashButton
-                      type="submit"
-                      className="inline-flex h-9 w-9 items-center justify-center rounded-full text-red-600 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:hover:bg-red-950"
-                    />
-                  </form>
+                  <DeleteRestrictionForm restrictionId={r.id} />
                 </li>
               ))}
             </ul>
