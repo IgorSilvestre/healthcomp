@@ -1,2 +1,4 @@
 - write all user viewed text in portuguese
 - always remember mobile and desktop (mobile design must be app like)
+- components folder are re-usable pieces of code
+- container folder are specific components just to organize the code
