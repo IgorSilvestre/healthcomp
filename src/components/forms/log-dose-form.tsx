@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useFormState } from "react-dom";
+import { useEffect, useRef, useActionState } from "react";
 import { logDose } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
 import { SubmitButton } from "@/components/forms/submit-button";
@@ -13,7 +12,7 @@ export function LogDoseForm({
   scheduleId: string;
   disabled?: boolean;
 }) {
-  const [state, formAction] = useFormState(logDose, defaultActionState);
+  const [state, formAction] = useActionState(logDose, defaultActionState);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {

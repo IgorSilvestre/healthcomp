@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useFormState } from "react-dom";
+import { useEffect, useRef, useActionState } from "react";
 import { createCommentEntry } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
 import { SubmitButton } from "@/components/forms/submit-button";
 
 export function CommentForm() {
-  const [state, formAction] = useFormState(
+  const [state, formAction] = useActionState(
     createCommentEntry,
     defaultActionState,
   );

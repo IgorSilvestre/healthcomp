@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
-import { useFormState } from "react-dom";
+import { useEffect, useMemo, useRef, useActionState } from "react";
 import { updateScheduleAction } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
 import type { Schedule } from "@/lib/care-log";
@@ -32,7 +31,7 @@ function toLocalDateInput(ms: number) {
 }
 
 export default function EditScheduleForm({ schedule, medications = [] as MedicationCatalogItem[] }: { schedule: Schedule; medications?: MedicationCatalogItem[] }) {
-  const [state, formAction] = useFormState(updateScheduleAction, defaultActionState);
+  const [state, formAction] = useActionState(updateScheduleAction, defaultActionState);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {

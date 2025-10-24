@@ -1,14 +1,13 @@
 "use client";
 
-import { useFormState } from "react-dom";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useActionState } from "react";
 import { createCatalogMedication } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
 import { PURPOSES } from "@/lib/constants";
 import { SubmitButton } from "@/components/forms/submit-button";
 
 export default function CatalogMedicationForm() {
-  const [state, formAction] = useFormState(createCatalogMedication, defaultActionState);
+  const [state, formAction] = useActionState(createCatalogMedication, defaultActionState);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {

@@ -1,12 +1,12 @@
 "use client";
 
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { deleteScheduleAction } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
 import { TrashButton } from "@/components/button/trashButton";
 
 export default function DeleteScheduleForm({ scheduleId }: { scheduleId: string }) {
-  const [, formAction] = useFormState(deleteScheduleAction, defaultActionState);
+  const [, formAction] = useActionState(deleteScheduleAction, defaultActionState);
 
   return (
     <form

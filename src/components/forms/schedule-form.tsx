@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useFormState } from "react-dom";
+import { useEffect, useRef, useActionState } from "react";
 import { createSchedule } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
 import { SubmitButton } from "@/components/forms/submit-button";
@@ -9,7 +8,7 @@ import { SubmitButton } from "@/components/forms/submit-button";
 import type { MedicationCatalogItem } from "@/lib/medications";
 
 export function ScheduleForm({ medications = [] as MedicationCatalogItem[] }: { medications?: MedicationCatalogItem[] }) {
-  const [state, formAction] = useFormState(createSchedule, defaultActionState);
+  const [state, formAction] = useActionState(createSchedule, defaultActionState);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
