@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -19,7 +19,6 @@ export const metadata: Metadata = {
   title: "Saúde Célio",
   description: "Acompanhamento de cuidado do nosso velinho",
   manifest: "/manifest.webmanifest",
-  themeColor: "#0ea5e9",
   icons: {
     icon: [
       { url: "/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -30,6 +29,10 @@ export const metadata: Metadata = {
     shortcut: ["/favicon.ico"],
   },
   applicationName: "Saúde Célio",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0ea5e9",
 };
 
 export default function RootLayout({
