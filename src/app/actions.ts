@@ -3,7 +3,8 @@
 import { revalidatePath } from "next/cache";
 import type { ActionState } from "@/lib/action-state";
 import { addHistoryEntry, addSchedule, markDoseTaken, getScheduleById, updateSchedule, deleteSchedule } from "@/lib/care-log";
-import { addMedicationToCatalog, deleteMedicationFromCatalog, type Purpose } from "@/lib/medications";
+import { addMedicationToCatalog, deleteMedicationFromCatalog } from "@/lib/medications";
+import type { Purpose } from "@/lib/constants";
 
 function parseDateInput(value: FormDataEntryValue | null) {
   if (!value) return Date.now();

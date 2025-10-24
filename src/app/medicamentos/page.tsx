@@ -1,7 +1,13 @@
 import CatalogMedicationForm from "@/components/forms/catalog-medication-form";
 import { getMedications } from "@/lib/medications";
-import { deleteCatalogMedication } from "@/app/actions";
+import { deleteCatalogMedication as deleteCatalogMedicationAction } from "@/app/actions";
+import { defaultActionState } from "@/lib/action-state";
 import { SubmitButton } from "@/components/forms/submit-button";
+
+async function deleteMedication(formData: FormData) {
+  "use server";
+  await deleteCatalogMedicationAction(defaultActionState, formData);
+}
 
 export default async function MedicamentosPage() {
   const medications = await getMedications();
@@ -27,7 +33,7 @@ export default async function MedicamentosPage() {
                     <div className="text-sm font-medium text-slate-900 dark:text-slate-100">{m.name}</div>
                     <div className="text-xs text-slate-500 dark:text-slate-400">Propósito: {m.purpose}</div>
                   </div>
-                  <form action={deleteCatalogMedication}>
+                  <form action={deleteMedication}>
                     <input type="hidden" name="id" value={m.id} />
                     <SubmitButton variant="danger" label="Excluir" />
                   </form>
