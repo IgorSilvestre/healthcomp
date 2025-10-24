@@ -3,7 +3,7 @@ import { getRestrictions } from "@/lib/restrictions";
 import { deleteRestriction as deleteRestrictionAction } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
 import { SubmitButton } from "@/components/forms/submit-button";
-import { TrashIconButton } from "@/components/button/trash-icon-button";
+import { TrashButton } from "@/components/button/trashButton";
 import Link from "next/link";
 
 async function deleteRestriction(formData: FormData) {
@@ -40,7 +40,7 @@ export default async function RestrictionsPage() {
                   </div>
                   <form action={deleteRestriction} className="ml-3">
                     <input type="hidden" name="id" value={r.id} />
-                    <TrashIconButton
+                    <TrashButton
                       type="submit"
                       className="inline-flex h-9 w-9 items-center justify-center rounded-full text-red-600 hover:bg-red-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:hover:bg-red-950"
                     />

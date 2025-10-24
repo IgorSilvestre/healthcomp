@@ -5,7 +5,7 @@ type Props = {
   className?: string;
 };
 
-export function TrashIconButton({
+export function TrashButton({
   type = "submit",
   className = "",
 }: Props) {
