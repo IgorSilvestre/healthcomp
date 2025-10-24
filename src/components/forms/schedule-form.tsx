@@ -13,7 +13,7 @@ function SubmitButton() {
       disabled={pending}
       className="mt-4 w-full rounded-lg bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {pending ? "Saving…" : "Create schedule"}
+      {pending ? "Salvando…" : "Adicionar Agendamento"}
     </button>
   );
 }
