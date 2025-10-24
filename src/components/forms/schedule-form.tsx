@@ -51,7 +51,7 @@ export function ScheduleForm() {
           />
         </label>
         <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-          Dosage (optional)
+          Dosagem (opcional)
           <input
             name="scheduleDosage"
             placeholder="e.g. 1 pill"
@@ -91,7 +91,7 @@ export function ScheduleForm() {
             />
           </label>
           <label className="flex flex-col gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-            Ultima vez tomado (opcional)
+            última vez tomado (opcional)
             <input
               type="datetime-local"
               name="lastTakenAt"
