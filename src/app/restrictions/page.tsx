@@ -24,7 +24,6 @@ export default async function RestrictionsPage() {
         </div>
 
         <section className="rounded-2xl border border-white/10 bg-white/90 p-6 shadow-xl backdrop-blur dark:border-white/10 dark:bg-slate-900/60">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Lista</h2>
           {restrictions.length === 0 ? (
             <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Nenhuma restrição cadastrada ainda.</p>
           ) : (
