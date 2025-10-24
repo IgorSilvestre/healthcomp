@@ -227,6 +227,46 @@ export async function logDose(
   };
 }
 
+export async function dismissDose(
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const scheduleId = formData.get("scheduleId")?.toString();
+  if (!scheduleId) {
+    return { status: "error", message: "Faltam informações do agendamento." };
+  }
+  const createdAt = parseDateInput(formData.get("createdAt"));
+  const reason = formData.get("reason")?.toString().trim();
+  const author = formData.get("author")?.toString().trim() || undefined;
+
+  const schedule = await getScheduleById(scheduleId);
+  if (!schedule) {
+    return { status: "error", message: "Agendamento não encontrado." };
+  }
+
+  await addHistoryEntry({
+    type: "medication",
+    medicationName: schedule.medicationName,
+    dosage: schedule.dosage,
+    note: reason && reason.length ? `Dose dispensada: ${reason}` : "Dose dispensada",
+    author,
+    createdAt,
+    scheduleId,
+  });
+
+  revalidatePath("/");
+  return { status: "success", message: "Dose dispensada registrada no histórico." };
+}
+
+// Wrappers para uso direto em <form action={...}> (assinatura de 1 argumento)
+export async function logDoseSubmit(formData: FormData): Promise<void> {
+  await logDose({} as ActionState, formData);
+}
+
+export async function dismissDoseSubmit(formData: FormData): Promise<void> {
+  await dismissDose({} as ActionState, formData);
+}
+
 export async function updateScheduleAction(
   _prevState: ActionState,
   formData: FormData,

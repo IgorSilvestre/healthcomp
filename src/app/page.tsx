@@ -1,4 +1,5 @@
-import { type HistoryEntry, getHistory } from "@/lib/care-log";
+import { type HistoryEntry, getHistory, getSchedules, getNextDoseTimestamp, type Schedule } from "@/lib/care-log";
+import { logDoseSubmit, dismissDoseSubmit } from "./actions";
 
 function formatDateTime(value: number, locale: string | string[] = "default") {
   return new Intl.DateTimeFormat(locale, {
@@ -97,7 +98,7 @@ function HistoryCard({
         <div className="relative mt-4 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
           <span className="inline-flex items-center gap-2 rounded-full bg-slate-900/5 px-3 py-1 dark:bg-white/5">
             <span aria-hidden>💊</span>
-            {entry.author ? `Logged by ${entry.author}` : "Logged dose"}
+            {entry.author ? `Registrado por ${entry.author}` : "Dose registrada"}
           </span>
         </div>
       </article>
@@ -138,15 +139,62 @@ function HistoryCard({
 
 export default async function Home() {
   const history = await getHistory();
+  const schedules = await getSchedules();
   const now = Date.now();
   const locale = "pt-BR";
   const relativeFormatter = new Intl.RelativeTimeFormat(locale, {
     numeric: "auto",
   });
 
+  const DUE_WINDOW_MS = 10 * 60 * 1000; // ±10 minutos
+  const due = schedules
+    .map((s) => ({ schedule: s, next: getNextDoseTimestamp(s) }))
+    .filter(({ next }) => !Number.isNaN(next))
+    .filter(({ next }) => Math.abs(next - now) <= DUE_WINDOW_MS)
+    .sort((a, b) => a.next - b.next);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 text-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 dark:text-slate-100">
-      <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
+        {due.length > 0 && (
+          <section className="rounded-3xl border border-amber-300/70 bg-gradient-to-br from-amber-50/80 via-white to-white p-6 shadow-lg shadow-amber-100/50 backdrop-blur dark:border-amber-700/40 dark:from-amber-900/40 dark:via-slate-900 dark:to-slate-950">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-amber-800 dark:text-amber-200">Doses próximas</h2>
+              <span className="text-xs uppercase tracking-wide text-amber-700/80 dark:text-amber-300/80">± 10 minutos</span>
+            </div>
+            <div className="mt-4 space-y-3">
+              {due.map(({ schedule, next }) => (
+                <article key={schedule.id} className="relative overflow-hidden rounded-2xl border border-amber-200/70 bg-white/90 p-4 shadow-sm dark:border-amber-700/40 dark:bg-slate-900/70">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-700 dark:bg-amber-500/20 dark:text-amber-200">Agora</span>
+                        <span className="text-xs text-amber-800 dark:text-amber-200">{formatDateTime(next, locale)} ({formatRelativeTime(next - now, relativeFormatter)})</span>
+                      </div>
+                      <h3 className="mt-1 text-base font-semibold text-slate-900 dark:text-white">{schedule.medicationName}</h3>
+                      {schedule.dosage && (
+                        <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Dose: {schedule.dosage}</p>
+                      )}
+                    </div>
+                    <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+                      <form action={logDoseSubmit} className="contents">
+                        <input type="hidden" name="scheduleId" value={schedule.id} />
+                        <input type="hidden" name="takenAt" value={now} />
+                        <button type="submit" className="flex-1 rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 sm:flex-none">Dar dose</button>
+                      </form>
+                      <form action={dismissDoseSubmit} className="contents">
+                        <input type="hidden" name="scheduleId" value={schedule.id} />
+                        <input type="hidden" name="createdAt" value={now} />
+                        <button type="submit" className="flex-1 rounded-full bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 sm:flex-none">Dispensar</button>
+                      </form>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
+
         <section className="rounded-3xl border border-white/85 bg-white/85 p-6 shadow-lg shadow-slate-100/50 backdrop-blur dark:border-white/10 dark:bg-slate-900/70 dark:shadow-none">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Histórico</h2>
