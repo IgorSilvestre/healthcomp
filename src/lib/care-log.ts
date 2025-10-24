@@ -123,6 +123,15 @@ export async function getScheduleById(id: string) {
   }
 }
 
+export async function deleteSchedule(id: string) {
+  await redis
+    .multi()
+    .srem(SCHEDULE_IDS_KEY, id)
+    .del(scheduleKey(id))
+    .exec();
+  return true;
+}
+
 export async function markDoseTaken(
   scheduleId: string,
   takenAt: number,

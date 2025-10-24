@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import type { ActionState } from "@/lib/action-state";
-import { addHistoryEntry, addSchedule, markDoseTaken } from "@/lib/care-log";
+import { addHistoryEntry, addSchedule, markDoseTaken, getScheduleById, updateSchedule, deleteSchedule } from "@/lib/care-log";
 
 function parseDateInput(value: FormDataEntryValue | null) {
   if (!value) return Date.now();
@@ -158,7 +158,7 @@ export async function logDose(
   if (!scheduleId) {
     return {
       status: "error",
-      message: "Missing schedule information.",
+      message: "Faltam informações do agendamento.",
     };
   }
 
@@ -172,7 +172,7 @@ export async function logDose(
     return {
       status: "error",
       message:
-        error instanceof Error ? error.message : "Unable to record the dose.",
+        error instanceof Error ? error.message : "Não foi possível registrar a dose.",
     };
   }
 
@@ -180,6 +180,101 @@ export async function logDose(
 
   return {
     status: "success",
-    message: "Dose logged to history.",
+    message: "Dose registrada no histórico.",
   };
+}
+
+export async function updateScheduleAction(
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const id = formData.get("scheduleId")?.toString();
+  if (!id) {
+    return { status: "error", message: "Agendamento não encontrado." };
+  }
+
+  const existing = await getScheduleById(id);
+  if (!existing) {
+    return { status: "error", message: "Agendamento não existe." };
+  }
+
+  const medicationName =
+    formData.get("scheduleMedicationName")?.toString().trim() ?? existing.medicationName;
+  if (!medicationName) {
+    return { status: "error", message: "Nome do medicamento é obrigatório." };
+  }
+
+  const frequencyRaw = Number(
+    formData.get("frequencyValue")?.toString().trim() ?? ""
+  );
+  const frequencyUnit =
+    formData.get("frequencyUnit")?.toString().trim() || "hours";
+  const multiplier = frequencyUnit === "minutes" ? 60_000 : 3_600_000;
+  const frequencyMs = Number.isFinite(frequencyRaw) && frequencyRaw > 0
+    ? frequencyRaw * multiplier
+    : existing.frequencyMs;
+
+  const startAt = formData.get("startAt")
+    ? parseDateInput(formData.get("startAt"))
+    : existing.startAt;
+
+  const endAtEntry = formData.get("endAt");
+  let endAt: number | undefined = existing.endAt;
+  if (endAtEntry !== null) {
+    const raw = endAtEntry.toString().trim();
+    if (!raw) {
+      endAt = undefined;
+    } else if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+      const [y, m, d] = raw.split("-").map((v) => Number(v));
+      endAt = new Date(y, m - 1, d, 23, 59, 59, 999).getTime();
+    } else {
+      endAt = parseDateInput(endAtEntry);
+    }
+  }
+
+  if (endAt !== undefined && endAt < startAt) {
+    return {
+      status: "error",
+      message: "O prazo deve ser no mesmo dia ou após a primeira dose.",
+    };
+  }
+
+  const dosage = formData.get("scheduleDosage")?.toString().trim();
+  const notes = formData.get("scheduleNotes")?.toString().trim();
+
+  const lastTakenAtEntry = formData.get("lastTakenAt");
+  const lastTakenAt = lastTakenAtEntry && lastTakenAtEntry.toString().trim()
+    ? parseDateInput(lastTakenAtEntry)
+    : undefined;
+
+  await updateSchedule({
+    ...existing,
+    medicationName,
+    dosage: dosage || undefined,
+    frequencyMs,
+    startAt,
+    endAt,
+    lastTakenAt: lastTakenAt ?? existing.lastTakenAt,
+    notes: notes && notes.length ? notes : existing.notes,
+  });
+
+  revalidatePath("/schedule");
+  revalidatePath("/");
+
+  return { status: "success", message: "Agendamento atualizado." };
+}
+
+export async function deleteScheduleAction(
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const id = formData.get("scheduleId")?.toString();
+  if (!id) {
+    return { status: "error", message: "Agendamento não encontrado." };
+  }
+
+  await deleteSchedule(id);
+  revalidatePath("/schedule");
+  revalidatePath("/");
+  return { status: "success", message: "Agendamento excluído." };
 }
