@@ -2,7 +2,7 @@ import { getMedications } from "@/lib/medications";
 import { deleteCatalogMedication as deleteCatalogMedicationAction } from "@/app/actions";
 import { defaultActionState } from "@/lib/action-state";
 import Link from "next/link";
-import Image from "next/image";
+import { TrashButton } from "@/components/button/trashButton";
 
 async function deleteMedication(formData: FormData) {
   "use server";
@@ -35,14 +35,10 @@ export default async function MedicamentosPage() {
                   </div>
                   <form action={deleteMedication}>
                     <input type="hidden" name="id" value={m.id} />
-                    <button
+                    <TrashButton
                       type="submit"
-                      aria-label="Excluir medicamento"
-                      title="Excluir"
                       className="ml-3 inline-flex h-10 w-10 items-center justify-center rounded-full border border-rose-200 bg-rose-50 p-2 text-rose-700 hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:ring-offset-2 dark:border-rose-800/50 dark:bg-rose-900/30 dark:text-rose-200 dark:hover:bg-rose-900/50"
-                    >
-                      <Image src="/icon/trash.svg" alt="" width={20} height={20} className="h-5 w-5" aria-hidden={true} />
-                    </button>
+                    />
                   </form>
                 </li>
               ))}
