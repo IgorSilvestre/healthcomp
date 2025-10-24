@@ -64,7 +64,7 @@ export async function createCatalogMedication(
   } catch (e) {
     return { status: "error", message: e instanceof Error ? e.message : "Não foi possível adicionar o medicamento." };
   }
-  revalidatePath("/medicamentos");
+  revalidatePath("/medication-list");
   revalidatePath("/medication");
   revalidatePath("/schedule");
   return { status: "success", message: "Medicamento adicionado ao catálogo." };
@@ -81,7 +81,7 @@ export async function deleteCatalogMedication(
   } catch {
     return { status: "error", message: "Não foi possível excluir." };
   }
-  revalidatePath("/medicamentos");
+  revalidatePath("/medication-list");
   revalidatePath("/medication");
   revalidatePath("/schedule");
   return { status: "success", message: "Excluído." };

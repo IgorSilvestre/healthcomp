@@ -35,6 +35,7 @@ export default function NotificationsScheduler({ schedules }: { schedules: Sched
   const [permission, setPermission] = useState<NotificationPermission>(typeof window !== "undefined" && "Notification" in window ? Notification.permission : "default");
   const [swReady, setSwReady] = useState<ServiceWorkerRegistration | null>(null);
   const timers = useRef<PendingTimer[]>([]);
+  const timerId = useRef<number | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
 
   // Ordena próximos eventos para debug/garantia

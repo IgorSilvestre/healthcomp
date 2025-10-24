@@ -75,7 +75,7 @@ const items: Item[] = [
     ),
   },
   {
-    href: "/medicamentos",
+    href: "/medication-list",
     label: "Medicamentos",
     icon: (active: boolean) => (
       <svg

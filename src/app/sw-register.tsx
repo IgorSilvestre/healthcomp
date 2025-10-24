@@ -12,6 +12,21 @@ export default function SWRegister() {
           // Optional: listen for updates
           reg.addEventListener?.("updatefound", () => {
           });
+
+          // Segurança: desregistrar qualquer Service Worker antigo que não seja o nosso /sw.js
+          try {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            const ours = new URL("/sw.js", location.origin).toString();
+            await Promise.all(
+              regs.map(async (r) => {
+                const urls = [r.active?.scriptURL, r.waiting?.scriptURL, r.installing?.scriptURL].filter(Boolean) as string[];
+                const isOurs = urls.some((u) => u === ours);
+                if (!isOurs) {
+                  try { await r.unregister(); } catch {}
+                }
+              })
+            );
+          } catch {}
         } catch (err) {
           console.warn("Service worker registration failed", err);
         }
