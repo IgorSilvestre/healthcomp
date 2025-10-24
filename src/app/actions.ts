@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import type { ActionState } from "@/lib/action-state";
 import { addHistoryEntry, addSchedule, markDoseTaken, getScheduleById, updateSchedule, deleteSchedule } from "@/lib/care-log";
 import { addMedicationToCatalog, deleteMedicationFromCatalog } from "@/lib/medications";
+import { addRestriction, deleteRestriction as deleteRestrictionFromStore } from "@/lib/restrictions";
 import type { Purpose } from "@/lib/constants";
 
 function parseDateInput(value: FormDataEntryValue | null) {
@@ -110,7 +111,7 @@ export async function createCommentEntry(
   revalidatePath("/");
   return {
     status: "success",
-    message: "Comment added to history.",
+    message: "Comentário adicionado ao histórico.",
   };
 }
 
@@ -319,4 +320,46 @@ export async function deleteScheduleAction(
   revalidatePath("/schedule");
   revalidatePath("/");
   return { status: "success", message: "Agendamento excluído." };
+}
+
+export async function createRestriction(
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const categoria = (formData.get("categoria")?.toString().trim() ?? "") as "alimento" | "atividade";
+  const titulo = formData.get("titulo")?.toString().trim() ?? "";
+  const detalhes = formData.get("detalhes")?.toString().trim() || undefined;
+
+  if (!titulo) {
+    return { status: "error", message: "Informe um título." };
+  }
+  if (categoria !== "alimento" && categoria !== "atividade") {
+    return { status: "error", message: "Selecione uma categoria válida." };
+  }
+
+  try {
+    await addRestriction({ categoria, titulo, detalhes });
+  } catch (e) {
+    return { status: "error", message: e instanceof Error ? e.message : "Não foi possível salvar." };
+  }
+
+  revalidatePath("/restrictions");
+  return { status: "success", message: "Restrição adicionada." };
+}
+
+export async function deleteRestriction(
+  _prevState: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const id = formData.get("id")?.toString();
+  if (!id) return { status: "error", message: "ID inválido." };
+
+  try {
+    await deleteRestrictionFromStore(id);
+  } catch {
+    return { status: "error", message: "Não foi possível excluir." };
+  }
+
+  revalidatePath("/restrictions");
+  return { status: "success", message: "Excluída." };
 }

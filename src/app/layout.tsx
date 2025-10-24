@@ -63,6 +63,9 @@ export default function RootLayout({
               <Link href="/medication-list" className="rounded-full bg-violet-600 px-2 py-1 font-medium text-white hover:bg-violet-700 sm:px-3 sm:py-1.5">
                 Medicamentos
               </Link>
+              <Link href="/restrictions" className="rounded-full bg-rose-600 px-2 py-1 font-medium text-white hover:bg-rose-700 sm:px-3 sm:py-1.5">
+                Restrições
+              </Link>
             </div>
           </div>
         </nav>

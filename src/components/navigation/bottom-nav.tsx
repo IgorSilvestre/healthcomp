@@ -110,6 +110,23 @@ const items: Item[] = [
       </svg>
     ),
   },
+  {
+    href: "/restrictions",
+    label: "Restrições",
+    icon: (active: boolean) => (
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        className="h-6 w-6"
+        fill={active ? "currentColor" : "none"}
+        stroke="currentColor"
+        strokeWidth={1.8}
+      >
+        <circle cx="12" cy="12" r="9" />
+        <path d="M6 18L18 6" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
 ];
 
 export default function BottomNav() {
