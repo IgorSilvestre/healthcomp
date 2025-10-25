@@ -264,6 +264,10 @@ export async function dismissDose(
     return { status: "error", message: "Agendamento não encontrado." };
   }
 
+  // Move the schedule forward so the next dose highlight disappears
+  schedule.lastTakenAt = createdAt;
+  await updateSchedule(schedule);
+
   await addHistoryEntry({
     type: "medication",
     medicationName: schedule.medicationName,
