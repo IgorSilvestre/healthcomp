@@ -4,6 +4,8 @@ export const PURPOSES = [
   "antibiotico",
   "diarreia",
   "estomago",
+    "coração",
+    "circulação",
   "outro",
 ] as const;
 
